@@ -1,10 +1,16 @@
 import pyotp
 import qrcode
-from flask import Flask, request, render_template_string
+from flask import Flask, render_template
 from PIL import Image
 
 
-app = Flask("Autenticador")
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+if __name__ == "__main__":
+    app.run(debug=True)
 
 key = pyotp.random_base32()
 print("Clave generada:", key)
@@ -16,7 +22,7 @@ print(uri)
 img= qrcode.make(uri)
 img.save("totp.png")
 
-print("Codigo QR generado y guardado como 'totp.png'. Escanea el qr con la aplicacion de autenticacion. ")
+
 
 #Validacion de datos
 totp = pyotp.TOTP(key)
