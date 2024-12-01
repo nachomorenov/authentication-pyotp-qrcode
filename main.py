@@ -4,6 +4,8 @@ from flask import Flask, request, render_template_string
 from PIL import Image
 
 
+app = Flask("Autenticador")
+
 key = pyotp.random_base32()
 print("Clave generada:", key)
 
