@@ -1,6 +1,7 @@
 import pyotp
 import qrcode
 from flask import Flask, request, render_template_string
+from PIL import Image
 
 
 key = pyotp.random_base32()
