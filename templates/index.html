@@ -1,12 +1,95 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autenticacion</title>
+    <title>Verificacion TOTP</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            margin: auto;
+            width: 50%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        img {
+            margin:20px 0;
+            width: 200px;
+            height: 200px;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[name="cancel"]{
+            background-color: #dc3545;
+        }
+        button:hover{
+            opacity: 0.9;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+/*Responsive*/
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 10px;
+    }
+    img {
+        width: 150px;
+        height: 150px;
+    }
+    input {
+        width: 95%;
+    }
+    button {
+        width: 95%;
+        padding: 10px;
+        font-size: 16px;
+    }
+}
+    </style>
 </head>
 <body>
-    <h1>¡Bienvenido a la página!</h1>
-    <p>Este es un ejemplo de cómo renderizar un template en Flask.</p>
+    <div class="container">
+    <h1>Verificacion en Dos Pasos</h1>
+    <p>Escanea el codigo QR para obtener tu codigo de autenticacion:</p>
+
+    <!--Mostrar el QR-->
+    <img src="data:image/png;base64,{{ qr_code_base64 }}" alt="Codigo QR">
+    
+    <h2>Ingrese el codigo para continuar:</h2>
+    <form method="POST">
+        <input type="text" name="codigo" placeholder="Ingrese el codigo" required>
+        <button type="submit">Enviar</button>
+        <button type="submit" name="cancel">Cancelar</button>
+    </form>
+
+    {% if message %}
+    <p class="error">{{ message }}</p>
+    {% endif %}
 </body>
 </html>
