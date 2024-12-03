@@ -133,23 +133,26 @@
     <h1>Verificacion en Dos Pasos</h1>
     <p>Escanea el codigo QR para obtener tu codigo de autenticacion:</p>
     <!--Mostrar el QR-->
-    <img src="data:image/png;base64,{{ qr_code_base64 }}" alt="Codigo QR">
+    <img src="data:image/png;base64,{{ qr_code }}" alt="Codigo QR">
     
     <h2>Ingrese el codigo para continuar:</h2>
-    <form method="POST">
+    <form action="/verify" method="POST">
         <input type="text" name="codigo" placeholder="Codigo" required>
         <button type="submit">Enviar</button>
         <button type="submit" name="cancel">Cancelar</button>
     </form>
 
-    {% if message %}
-    <p class="{{ 'error' if 'incorrecto' in message.lower() else 'success' }}">{{ message }}</p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="message">{{ messages[0] }}</div>
     {% endif %}
+    {% endwith %}
+
     <div class="timer-container">
         <div class="progress-bar">
             <div class="progress" id="progress-bar"></div>
         </div>
-        <div class="time-remaining" id="time-remaining">30 segundos restantes</div>
+        <p id="time-remaining"></p>
     </div>
 </div>
 <script>
