@@ -43,7 +43,7 @@
             cursor: pointer;
         }
 
-        button[name="cancel"]{
+        button[name="cancel"] {
             background-color: #dc3545;
         }
 
@@ -58,10 +58,14 @@
 
         .timer-container {
             margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .progress-bar {
-            background-color: #007BFF;
+            background-color: #ddd;
             height: 20px;
             border-radius: 5px;
             width: 100%;
@@ -72,7 +76,7 @@
         .progress {
             height: 100%;
             background-color: #28a745;
-            transition: width 0.5s linear;
+            transition: width 1s linear;
         }
 
         .time-remaining {
@@ -92,7 +96,34 @@
     }
 
     input, button {
-        width: 95%;
+        width: 90%;
+    }
+
+    .progress-bar {
+        height: 15px;
+    }
+
+    .time-remaining {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    img {
+        width: 120px;
+        height: 120px;
+    }
+
+    input, button {
+        width: 100%;
+    }
+
+    .progress-bar {
+        height: 10px;
+    }
+
+    .time-remaining {
+        font-size: 12px;
     }
 }
     </style>
@@ -101,13 +132,12 @@
     <div class="container">
     <h1>Verificacion en Dos Pasos</h1>
     <p>Escanea el codigo QR para obtener tu codigo de autenticacion:</p>
-
     <!--Mostrar el QR-->
     <img src="data:image/png;base64,{{ qr_code_base64 }}" alt="Codigo QR">
     
     <h2>Ingrese el codigo para continuar:</h2>
     <form method="POST">
-        <input type="text" name="codigo" placeholder="Ingrese el codigo" required>
+        <input type="text" name="codigo" placeholder="Codigo" required>
         <button type="submit">Enviar</button>
         <button type="submit" name="cancel">Cancelar</button>
     </form>
@@ -126,21 +156,21 @@
     const progressBar = document.getElementById("progress-bar");
     const timeRemaining = document.getElementById("time-remaining");
     const totpInterval = 30;
-
     let remainingTime = totpInterval;
 
     function updateTimer() {
-        remainingTime--;
-        const percentage = (remainingTime / totpInterval) * 100;
-
-        progressBar.style.width = '${percentage}%';
-        timeRemaining.textContent = '${remainingTime} segundos restantes';
-
-        if (remainingTime <= 0) {
+        if (remainingTime > 0) {
+            remainingTime--;
+            const percentage = (remainingTime / totpInterval) * 100;
+            progressBar.style.width = `${percentage}%`;
+            timeRemaining.textContent = `${remainingTime} segundos restantes`;
+        } else {
             remainingTime = totpInterval;
         }
     }
+
     setInterval(updateTimer, 1000);
+    updateTimer()
 </script>
 </body>
 </html>
