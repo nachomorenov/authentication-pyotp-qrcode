@@ -13,6 +13,7 @@
             text-align: center;
             padding: 20px;
         }
+
         .container {
             background: #fff;
             padding: 20px;
@@ -21,35 +22,61 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             border-radius: 10px;
         }
+
         img {
             margin:20px 0;
             width: 200px;
             height: 200px;
         }
-        input {
+
+        input, button {
             padding: 10px;
             margin: 10px;
             width: 80%;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         button {
-            padding: 10px 20px;
-            margin: 5px;
             background-color: #007BFF;
             color: #fff;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
+
         button[name="cancel"]{
             background-color: #dc3545;
         }
+
         button:hover{
             opacity: 0.9;
         }
+
         .error {
             color: red;
+            font-weight: bold;
+        }
+
+        .timer-container {
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            background-color: #007BFF;
+            height: 20px;
+            border-radius: 5px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #28a745;
+            transition: width 0.5s linear;
+        }
+
+        .time-remaining {
+            margin-top: 5px;
             font-weight: bold;
         }
 /*Responsive*/
@@ -58,17 +85,14 @@
         width: 90%;
         padding: 10px;
     }
+
     img {
         width: 150px;
         height: 150px;
     }
-    input {
+
+    input, button {
         width: 95%;
-    }
-    button {
-        width: 95%;
-        padding: 10px;
-        font-size: 16px;
     }
 }
     </style>
@@ -89,7 +113,34 @@
     </form>
 
     {% if message %}
-    <p class="error">{{ message }}</p>
+    <p class="{{ 'error' if 'incorrecto' in message.lower() else 'success' }}">{{ message }}</p>
     {% endif %}
+    <div class="timer-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar"></div>
+        </div>
+        <div class="time-remaining" id="time-remaining">30 segundos restantes</div>
+    </div>
+</div>
+<script>
+    const progressBar = document.getElementById("progress-bar");
+    const timeRemaining = document.getElementById("time-remaining");
+    const totpInterval = 30;
+
+    let remainingTime = totpInterval;
+
+    function updateTimer() {
+        remainingTime--;
+        const percentage = (remainingTime / totpInterval) * 100;
+
+        progressBar.style.width = '${percentage}%';
+        timeRemaining.textContent = '${remainingTime} segundos restantes';
+
+        if (remainingTime <= 0) {
+            remainingTime = totpInterval;
+        }
+    }
+    setInterval(updateTimer, 1000);
+</script>
 </body>
 </html>
